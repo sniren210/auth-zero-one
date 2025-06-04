@@ -1,8 +1,8 @@
 import ButtonComponent from "@/components/ButtonComponent";
 import InputComponent from "@/components/InputComponent";
-
 import { useAuthStore } from "@/store/AuthStore";
 import { useFormStore } from "@/store/FormStore";
+
 import {
   FiCheckCircle,
   FiUser,
