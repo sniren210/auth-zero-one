@@ -126,7 +126,13 @@ const LoginPage: React.FC = () => {
         <div className="relative z-10 text-center lg:text-left max-w-md">
           <div className="mb-8">
             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 mx-auto lg:mx-0">
-              <FiUser className="text-teal-600" size={32} aria-hidden="true" />
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={48}
+                height={48}
+                className="w-16 h-16"
+              />
             </div>
             <h1 className="text-3xl lg:text-4xl font-bold mb-4 leading-tight">
               Your Trusted Digital Transformation Partner

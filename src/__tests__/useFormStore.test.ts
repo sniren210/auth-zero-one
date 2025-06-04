@@ -1,6 +1,6 @@
 
 import { act, renderHook } from "@testing-library/react";
-import { useFormStore } from "../FormStore";
+import { useFormStore } from "../store/FormStore";
 
 describe("useFormStore", () => {
   beforeEach(() => {
