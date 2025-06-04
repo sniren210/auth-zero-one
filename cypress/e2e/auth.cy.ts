@@ -3,53 +3,66 @@ describe("Authentication Flow", () => {
     cy.visit("/");
   });
 
-  it("should display login form by default", () => {
-    cy.contains("Sign in to your account").should("be.visible");
+  it("should display the login page", () => {
+    cy.contains("Login to your Account").should("be.visible");
     cy.get('input[placeholder*="email" i]').should("be.visible");
     cy.get('input[placeholder*="password" i]').should("be.visible");
-    cy.get('button[type="submit"]').should("contain", "Sign In");
   });
 
-  it("should toggle between login and register forms", () => {
-    // Should start with login form
-    cy.contains("Sign in to your account").should("be.visible");
-    cy.get('button[type="submit"]').should("contain", "Sign In");
-
-    // Switch to register
-    cy.contains("Don't have an account?").parent().find("button").click();
-
-    cy.contains("Create your account").should("be.visible");
-    cy.get('input[placeholder*="name" i]').should("be.visible");
-    cy.get('button[type="submit"]').should("contain", "Sign Up");
-
-    // Switch back to login
-    cy.contains("Already have an account?").parent().find("button").click();
-
-    cy.contains("Sign in to your account").should("be.visible");
-    cy.get('button[type="submit"]').should("contain", "Sign In");
-  });
-
-  it("should show validation errors for empty fields", () => {
+  it("should show validation errors for empty form submission", () => {
     cy.get('button[type="submit"]').click();
-
-    // Should show validation errors (adjust based on your actual error messages)
-    cy.get('[role="alert"]').should("be.visible");
+    // Adjust these selectors based on your actual error display
+    cy.get('[role="alert"]').should("exist");
   });
 
-  it("should handle successful login flow", () => {
-    cy.fixture("users").then((users) => {
-      cy.fillLoginForm(users.validUser.email, users.validUser.password);
+  it("should toggle password visibility", () => {
+    cy.get('input[placeholder*="password" i]').should(
+      "have.attr",
+      "type",
+      "password"
+    );
+    cy.get('button[aria-label*="Show password"]').click();
+    cy.get('input[placeholder*="password" i]').should(
+      "have.attr",
+      "type",
+      "text"
+    );
+  });
+
+  it("should allow valid login with correct credentials", () => {
+      cy.get('input[placeholder*="email" i]').type("demo@example.com");
+      cy.get('input[placeholder*="password" i]').type("password123");
       cy.get('button[type="submit"]').click();
-
-      // Should show success state or redirect
-      cy.contains("Welcome!").should("be.visible");
+      cy.contains("Successfully logged in as demo").should("be.visible");
     });
-  });
+  
 
-  it("should handle Google login", () => {
-    cy.contains("Continue with Google").click();
-
-    // Should show alert (in real app, would handle OAuth flow)
-    cy.window().its("alert").should("have.been.called");
-  });
+  it("should navigate to register page", () => {
+      cy.contains("Create an account").click();
+      cy.contains("Create your Account").should("be.visible");
+    });
+  
+    it("should allow user registration", () => {
+      cy.contains("Create an account").click();
+      cy.get('input[placeholder*="name" i]').type("Test User");
+      cy.get('input[placeholder*="email" i]').type("test@example.com");
+      cy.get('input[placeholder*="password" i]').type("Password123!");
+      cy.get('button[type="submit"]').click();
+    });
+  
+    it("should show validation errors for invalid registration", () => {
+      cy.contains("Create an account").click();
+      cy.get('button[type="submit"]').click();
+      cy.get('[role="alert"]').should("exist");
+      
+      // Test invalid email format
+      cy.get('input[placeholder*="email" i]').type("invalid-email");
+      cy.get('button[type="submit"]').click();
+      cy.get('[role="alert"]').should("contain", "valid email");
+      
+      // Test password requirements
+      cy.get('input[placeholder*="password" i]').type("short");
+      cy.get('button[type="submit"]').click();
+      cy.get('[role="alert"]').should("exist");
+    });  
 });

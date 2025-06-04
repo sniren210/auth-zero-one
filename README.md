@@ -1,40 +1,425 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Authentication App
 
-## Getting Started
+A modern authentication application built with Next.js, TypeScript, and Tailwind CSS featuring login, registration, and user management capabilities.
 
-First, run the development server:
+## 🚀 Features
+
+- **User Authentication**: Login and registration functionality
+- **Form Validation**: Client-side validation for email, password, and name fields
+- **State Management**: Zustand-based stores for auth and form state
+- **Responsive Design**: Mobile-first design with Tailwind CSS
+- **TypeScript**: Full type safety throughout the application
+- **Remember Me**: Persistent login sessions
+- **Google OAuth Ready**: Prepared for Google authentication integration
+
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Node.js** (version 16.8 or later)
+- **npm**, **yarn**, **pnpm**, or **bun** package manager
+- **Git** for version control
+
+## 🛠️ Development Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd zero-one-project
+```
+
+### 2. Install Dependencies
+
+Choose your preferred package manager:
+
+```bash
+npm install
+```
+
+```bash
+yarn install
+```
+
+```bash
+pnpm install
+```
+
+```bash
+bun install
+```
+
+### 3. Environment Configuration
+
+Create a `.env.local` file in the root directory:
+
+```bash
+cp .env.example .env.local
+```
+
+Add your environment variables:
+
+```env
+# Authentication
+NEXTAUTH_SECRET=your-secret-key-here
+NEXTAUTH_URL=http://localhost:3000
+
+# Database (if applicable)
+DATABASE_URL=your-database-url
+
+# Google OAuth (when implemented)
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+```
+
+### 4. Start Development Server
 
 ```bash
 npm run dev
-# or
+```
+
+```bash
 yarn dev
-# or
+```
+
+```bash
 pnpm dev
-# or
+```
+
+```bash
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will be available at [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## 🏗️ Project Structure
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```
+src/                   # Source code
+│   ├── components/        # Reusable UI components
+│   ├── hooks/            # Custom React hooks
+│   ├── interface/        # TypeScript interfaces and types
+│   ├── pages/            # Next.js pages (Pages Router)
+│   │   ├── api/          # API routes
+│   │   ├── _app.tsx      # App component wrapper
+│   │   ├── _document.tsx # Document component
+│   │   └── index.tsx     # Main login/register page
+│   ├── store/            # State management
+│   ├── styles/           # Global styles and CSS modules
+│   ├── utils/            # Utility functions and helpers
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+## 🧪 Testing
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Setting Up Tests
 
-## Learn More
+First, install testing dependencies:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom @testing-library/user-event jest-environment-jsdom
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+### Running Tests
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run test
+```
 
-## Deploy on Vercel
+```bash
+npm run test:watch
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run test:coverage
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+### Testing Guidelines
+
+- **Unit Tests**: Test individual components and functions
+- **Integration Tests**: Test component interactions and API calls
+- **E2E Tests**: Test complete user workflows
+
+### Test Structure
+
+```
+cypress/
+├── component/           # Component testing
+├── downloads/           # Downloaded files
+├── e2e/                # End-to-end tests
+└── support/            # Support files
+
+test/
+├── integration/        # Integration tests
+└── setup/             # Test setup files
+```
+
+### Example Test Files
+
+```typescript:__tests__/pages/index.test.tsx
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import LoginPage from '@/pages/index'
+
+// Mock the stores
+jest.mock('@/stores/authStore')
+jest.mock('@/stores/formStore')
+
+describe('LoginPage', () => {
+  beforeEach(() => {
+    // Reset mocks before each test
+    jest.clearAllMocks()
+  })
+
+  it('renders login form by default', () => {
+    render(<LoginPage />)
+
+    expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument()
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
+  })
+
+  it('switches to register mode when toggle is clicked', async () => {
+    const user = userEvent.setup()
+    render(<LoginPage />)
+
+    const toggleButton = screen.getByText(/create account/i)
+    await user.click(toggleButton)
+
+    expect(screen.getByRole('button', { name: /sign up/i })).toBeInTheDocument()
+    expect(screen.getByLabelText(/name/i)).toBeInTheDocument()
+  })
+
+  it('validates email format', async () => {
+    const user = userEvent.setup()
+    render(<LoginPage />)
+
+    const emailInput = screen.getByLabelText(/email/i)
+    await user.type(emailInput, 'invalid-email')
+
+    const submitButton = screen.getByRole('button', { name: /sign in/i })
+    await user.click(submitButton)
+
+    await waitFor(() => {
+      expect(screen.getByText(/invalid email format/i)).toBeInTheDocument()
+    })
+  })
+})
+```
+
+```typescript:__tests__/stores/authStore.test.ts
+import { renderHook, act } from '@testing-library/react'
+import { useAuthStore } from '@/stores/authStore'
+
+describe('AuthStore', () => {
+  beforeEach(() => {
+    // Reset store state before each test
+    useAuthStore.getState().logout()
+  })
+
+  it('initializes with default state', () => {
+    const { result } = renderHook(() => useAuthStore())
+
+    expect(result.current.user).toBeNull()
+    expect(result.current.loading).toBe(false)
+    expect(result.current.error).toBeNull()
+    expect(result.current.rememberMe).toBe(false)
+  })
+
+  it('handles login successfully', async () => {
+    const { result } = renderHook(() => useAuthStore())
+
+    await act(async () => {
+      await result.current.login('test@example.com', 'password123')
+    })
+
+    expect(result.current.user).toBeTruthy()
+    expect(result.current.error).toBeNull()
+  })
+
+  it('handles login failure', async () => {
+    const { result } = renderHook(() => useAuthStore())
+
+    await act(async () => {
+      await result.current.login('invalid@example.com', 'wrongpassword')
+    })
+
+    expect(result.current.user).toBeNull()
+    expect(result.current.error).toBeTruthy()
+  })
+})
+```
+
+## 🔧 Available Scripts
+
+| Script          | Description                     |
+| --------------- | ------------------------------- |
+| `dev`           | Start development server        |
+| `build`         | Build production application    |
+| `start`         | Start production server         |
+| `lint`          | Run ESLint for code quality     |
+| `lint:fix`      | Fix ESLint issues automatically |
+| `type-check`    | Run TypeScript type checking    |
+| `test`          | Run test suite                  |
+| `test:watch`    | Run tests in watch mode         |
+| `test:coverage` | Generate test coverage report   |
+
+## 📦 Building for Production
+
+### 1. Build the Application
+
+```bash
+npm run build
+```
+
+### 2. Test Production Build Locally
+
+```bash
+npm run start
+```
+
+### 3. Optimize and Analyze
+
+```bash
+npm run analyze
+```
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+
+1. **Connect Repository**: Link your GitHub/GitLab repository to Vercel
+2. **Configure Environment Variables**: Add your `.env.local` variables to Vercel dashboard
+3. **Deploy**: Automatic deployment on every push to main branch
+
+```bash
+npm i -g vercel
+vercel --prod
+```
+
+### Docker Deployment
+
+1. **Build Docker Image**:
+
+```bash
+docker build -t auth-app .
+```
+
+2. **Run Container**:
+
+```bash
+docker run -p 3000:3000 auth-app
+```
+
+### Manual Server Deployment
+
+1. **Build Application**:
+
+```bash
+npm run build
+```
+
+2. **Copy Files**: Upload `.next`, `public`, `package.json`, and `package-lock.json`
+
+3. **Install Dependencies**:
+
+```bash
+npm ci --only=production
+```
+
+4. **Start Application**:
+
+```bash
+npm start
+```
+
+## 🔒 Security Considerations
+
+- **Environment Variables**: Never commit sensitive data to version control
+- **HTTPS**: Always use HTTPS in production
+- **CORS**: Configure proper CORS policies
+- **Rate Limiting**: Implement rate limiting for authentication endpoints
+- **Input Validation**: Validate all user inputs on both client and server
+- **Password Security**: Use proper password hashing (bcrypt, argon2)
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **Port Already in Use**:
+
+   ```bash
+   lsof -ti:3000 | xargs kill -9
+   ```
+
+2. **Node Modules Issues**:
+
+   ```bash
+   rm -rf node_modules package-lock.json
+   npm install
+   ```
+
+3. **TypeScript Errors**:
+
+   ```bash
+   npm run type-check
+   ```
+
+4. **Build Failures**:
+   ```bash
+   npm run lint:fix
+   npm run build
+   ```
+
+## 📚 Development Guidelines
+
+### Code Style
+
+- Use **TypeScript** for all new files
+- Follow **ESLint** and **Prettier** configurations
+- Use **functional components** with hooks
+- Implement **proper error handling**
+- Write **meaningful commit messages**
+
+### State Management
+
+- Use **Zustand** for global state
+- Keep **local state** for component-specific data
+- Implement **proper error states**
+- Handle **loading states** appropriately
+
+### API Guidelines
+
+- Use **proper HTTP status codes**
+- Implement **error handling middleware**
+- Add **request validation**
+- Use **consistent response formats**
+
+## 🤝 Contributing
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+- **Documentation**: Check this README and inline code comments
+- **Issues**: Create an issue on GitHub for bugs or feature requests
+- **Discussions**: Use GitHub Discussions for questions and ideas
+
+## 🔗 Useful Links
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Zustand Documentation](https://github.com/pmndrs/zustand)
+- [Testing Library Documentation](https://testing-library.com/docs/)
+
+---
+
+**Happy Coding! 🎉**
