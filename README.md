@@ -25,7 +25,7 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/sniren210/auth-zero-one.git
 cd zero-one-project
 ```
 
@@ -60,9 +60,12 @@ cp .env.example .env.local
 Add your environment variables:
 
 ```env
+# This is an example of a .env file for a Next.js application.
+NODE_ENV=production
+PORT=3000
+
 # Authentication
-NEXTAUTH_SECRET=your-secret-key-here
-NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_URL=https://zero-one-project-gules.vercel.app/
 
 # Database (if applicable)
 DATABASE_URL=your-database-url
@@ -90,7 +93,7 @@ pnpm dev
 bun dev
 ```
 
-The application will be available at [http://localhost:3000](http://localhost:3000)
+The application will be available at [https://zero-one-project-gules.vercel.app/](https://zero-one-project-gules.vercel.app/)
 
 ## 🏗️ Project Structure
 
@@ -142,9 +145,17 @@ npm run test:coverage
 ### Test Structure
 
 ```
+src/
+└── __tests__/          # Test files
+    ├── ButtonComponent.test.tsx
+    ├── index.test.tsx
+    ├── InputComponent.test.tsx
+    ├── useAuthStore.test.ts
+    └── useFormStore.test.ts
+
 cypress/
 ├── component/           # Component testing
-├── downloads/           # Downloaded files
+├── downloads/          # Downloaded files
 ├── e2e/                # End-to-end tests
 └── support/            # Support files
 
@@ -421,5 +432,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Testing Library Documentation](https://testing-library.com/docs/)
 
 ---
-
 **Happy Coding! 🎉**
