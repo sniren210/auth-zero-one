@@ -2,6 +2,7 @@ import ButtonComponent from "@/components/ButtonComponent";
 import InputComponent from "@/components/InputComponent";
 import { useAuthStore } from "@/store/AuthStore";
 import { useFormStore } from "@/store/FormStore";
+import Image from "next/image";
 
 import {
   FiCheckCircle,
@@ -152,11 +153,14 @@ const LoginPage: React.FC = () => {
         <div className="max-w-md mx-auto w-full">
           {/* Logo */}
           <div className="mb-8 text-center lg:text-left">
-            <div className="w-12 h-12 bg-teal-600 rounded-lg flex items-center justify-center mb-4 mx-auto lg:mx-0">
-              <div
-                className="w-6 h-6 bg-white rounded"
-                aria-hidden="true"
-              ></div>
+            <div className="w-24 h-24  flex items-center justify-center mb-4 mx-auto lg:mx-0">
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={48}
+                height={48}
+                className="w-16 h-16"
+              />
             </div>
             <h2 className="text-2xl font-bold text-gray-800 mb-2">
               {isLogin ? "Login to your Account" : "Create your Account"}

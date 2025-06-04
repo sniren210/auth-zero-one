@@ -1,4 +1,9 @@
 import "@testing-library/jest-dom";
+import "whatwg-fetch";
+
+import { jest } from "@jest/globals";
+
+global.jest = jest;
 
 // Mock Next.js router
 jest.mock("next/router", () => ({
