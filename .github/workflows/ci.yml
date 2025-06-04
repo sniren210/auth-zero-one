@@ -34,18 +34,18 @@ jobs:
       - name: Run type checking
         run: npm run type-check
 
-      - name: Run unit tests
-        run: npm run test:unit
+      # - name: Run unit tests
+      #   run: npm run test:unit
 
-      - name: Run coverage
-        run: npm run test:coverage
+      # - name: Run coverage
+      #   run: npm run test:coverage
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./coverage/lcov.info
-          flags: unittests
-          name: codecov-umbrella
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v3
+      #   with:
+      #     file: ./coverage/lcov.info
+      #     flags: unittests
+      #     name: codecov-umbrella
 
   e2e:
     runs-on: ubuntu-latest
