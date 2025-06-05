@@ -262,17 +262,23 @@ describe('AuthStore', () => {
 
 ## 🔧 Available Scripts
 
-| Script          | Description                     |
-| --------------- | ------------------------------- |
-| `dev`           | Start development server        |
-| `build`         | Build production application    |
-| `start`         | Start production server         |
-| `lint`          | Run ESLint for code quality     |
-| `lint:fix`      | Fix ESLint issues automatically |
-| `type-check`    | Run TypeScript type checking    |
-| `test`          | Run test suite                  |
-| `test:watch`    | Run tests in watch mode         |
-| `test:coverage` | Generate test coverage report   |
+| Script            | Description                   |
+| ----------------- | ----------------------------- |
+| `dev`             | Start development server      |
+| `build`           | Build production application  |
+| `start`           | Start production server       |
+| `lint`            | Run ESLint for code quality   |
+| `test`            | Run Jest test suite           |
+| `test:watch`      | Run tests in watch mode       |
+| `test:coverage`   | Generate test coverage report |
+| `test:unit`       | Run unit tests only           |
+| `test:ci`         | Run tests in CI environment   |
+| `cypress:open`    | Open Cypress test runner      |
+| `cypress:run`     | Run Cypress tests             |
+| `test:e2e`        | Run end-to-end tests          |
+| `test:e2e:headed` | Run E2E tests in headed mode  |
+| `type-check`      | Run TypeScript type checking  |
+| `vercel-build`    | Build for Vercel deployment   |
 
 ## 📦 Building for Production
 
@@ -432,4 +438,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Testing Library Documentation](https://testing-library.com/docs/)
 
 ---
+
 **Happy Coding! 🎉**
